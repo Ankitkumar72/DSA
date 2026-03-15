@@ -375,7 +375,7 @@ As an early member of this server, you have a front-row seat to our development.
 ### :link: Stay Connected
 
 * **X (Twitter):** [https://x.com/SynqApp_]
-
+* **Website:** [https://synqweb-five.vercel.app/]
 Stay focused. Stay synced. 
 **The Synq Team**
 
