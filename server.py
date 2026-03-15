@@ -284,6 +284,89 @@ async def timeout(ctx, member: discord.Member, minutes: int, *, reason=None):
     await member.timeout(duration, reason=reason)
     await ctx.send(f"Member {member.name} has been timed out for {minutes} minutes. Reason: {reason}")
 
+def get_rules_embed():
+    embed = discord.Embed(
+        title="Server Rules",
+        description="Welcome to our community! Keep it chill, keep it cool.",
+        color=discord.Color.blue()
+    )
+    embed.add_field(name="1. Be Respectful", value="Treat everyone with respect. No harassment, hate speech, or personal attacks. We are all here to vibe and grow.", inline=False)
+    embed.add_field(name="2. No Spam", value="Avoid excessive messages, self-promotion, or link dumping. Quality over quantity.", inline=False)
+    embed.add_field(name="3. Stay On Topic", value="Use the right channels for the right conversations. Keep discussions relevant.", inline=False)
+    embed.add_field(name="4. No NSFW Content", value="Keep it clean. No explicit, offensive, or inappropriate content.", inline=False)
+    embed.add_field(name="5. Help, Dont Gatekeep", value="Everyone starts somewhere. Be supportive of beginners and share knowledge freely.", inline=False)
+    embed.add_field(name="6. No Piracy", value="Dont share or request pirated software, courses, or copyrighted material.", inline=False)
+    embed.add_field(name="7. Respect Privacy", value="Dont share others personal information. What is shared here stays here.", inline=False)
+    embed.add_field(name="8. Verified Links Only", value="Only admin-whitelisted domains are allowed. Videos are always welcome! If you want a site added, ask a mod.", inline=False)
+    embed.add_field(name="9. Use Common Sense", value="If it feels wrong, it probably is. When in doubt, ask a mod.", inline=False)
+    embed.set_footer(text="Breaking rules may result in warnings, mutes, or bans. Let's keep this a great place to code!")
+    return embed
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def setup(ctx):
+    guild = ctx.guild
+    await ctx.send("Starting server auto-setup...")
+    
+    # 1. Ensure Categories exist
+    info_cat = discord.utils.get(guild.categories, name="Information")
+    if not info_cat:
+        info_cat = await guild.create_category("Information")
+        
+    mod_cat = discord.utils.get(guild.categories, name="Moderation")
+    if not mod_cat:
+        mod_cat = await guild.create_category("Moderation")
+
+    # 2. Setup Moderation Logs (#mod-logs)
+    admin_roles = [r for r in guild.roles if r.permissions.administrator or r.permissions.manage_guild or r.permissions.manage_messages]
+    mod_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+    }
+    for role in admin_roles:
+        mod_overwrites[role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
+        
+    mod_logs = discord.utils.get(guild.channels, name="mod-logs")
+    if not mod_logs:
+        mod_logs = await guild.create_text_channel("mod-logs", category=mod_cat, overwrites=mod_overwrites)
+        await mod_logs.send("[System] Moderation log channel created and secured.")
+    else:
+        await mod_logs.edit(category=mod_cat, overwrites=mod_overwrites)
+        await mod_logs.send("[System] Moderation log permissions auto-corrected.")
+
+    # 3. Setup Rules Channel (#rules)
+    read_only_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(send_messages=False),
+        guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+    }
+    rules_channel = discord.utils.get(guild.channels, name="rules")
+    if not rules_channel:
+        rules_channel = await guild.create_text_channel("rules", category=info_cat, overwrites=read_only_overwrites)
+        await rules_channel.send(embed=get_rules_embed())
+    else:
+        await rules_channel.edit(category=info_cat, overwrites=read_only_overwrites)
+        # Check if empty, maybe send rules
+        hist = [m async for m in rules_channel.history(limit=5)]
+        if not hist:
+            await rules_channel.send(embed=get_rules_embed())
+
+    # 4. Setup Roles Channel (#roles)
+    roles_channel = discord.utils.get(guild.channels, name="roles")
+    if not roles_channel:
+        roles_channel = await guild.create_text_channel("roles", category=info_cat, overwrites=read_only_overwrites)
+        await roles_channel.send("Click a button below to pick your roles.", view=ReactionRoleView())
+    else:
+        await roles_channel.edit(category=info_cat, overwrites=read_only_overwrites)
+
+    # 5. Setup Introductions (#👋-introductions)
+    intro_channel = discord.utils.get(guild.channels, name="👋-introductions")
+    if not intro_channel:
+        intro_channel = await guild.create_text_channel("👋-introductions", category=info_cat)
+    else:
+        await intro_channel.edit(category=info_cat)
+
+    await ctx.send(f"Setup complete! Channels are configured in {info_cat.name} and {mod_cat.name}.")
+
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def setup_tickets(ctx):
@@ -326,25 +409,7 @@ async def serverinfo(ctx):
 
 @bot.command()
 async def rules(ctx):
-    embed = discord.Embed(
-        title="Server Rules",
-        description="Welcome to our community! Keep it chill, keep it cool.",
-        color=discord.Color.blue()
-    )
-    
-    embed.add_field(name="1. Be Respectful", value="Treat everyone with respect. No harassment, hate speech, or personal attacks. We are all here to vibe and grow.", inline=False)
-    embed.add_field(name="2. No Spam", value="Avoid excessive messages, self-promotion, or link dumping. Quality over quantity.", inline=False)
-    embed.add_field(name="3. Stay On Topic", value="Use the right channels for the right conversations. Keep discussions relevant.", inline=False)
-    embed.add_field(name="4. No NSFW Content", value="Keep it clean. No explicit, offensive, or inappropriate content.", inline=False)
-    embed.add_field(name="5. Help, Dont Gatekeep", value="Everyone starts somewhere. Be supportive of beginners and share knowledge freely.", inline=False)
-    embed.add_field(name="6. No Piracy", value="Dont share or request pirated software, courses, or copyrighted material.", inline=False)
-    embed.add_field(name="7. Respect Privacy", value="Dont share others personal information. What is shared here stays here.", inline=False)
-    embed.add_field(name="8. Verified Links Only", value="Only admin-whitelisted domains are allowed. Videos are always welcome! If you want a site added, ask a mod.", inline=False)
-    embed.add_field(name="9. Use Common Sense", value="If it feels wrong, it probably is. When in doubt, ask a mod.", inline=False)
-    
-    embed.set_footer(text="Breaking rules may result in warnings, mutes, or bans. Let's keep this a great place to code!")
-    
-    await ctx.send(embed=embed)
+    await ctx.send(embed=get_rules_embed())
 
 @bot.event
 async def on_guild_channel_create(channel):
