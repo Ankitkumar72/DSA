@@ -376,7 +376,7 @@ As an early member of this server, you have a front-row seat to our development.
 * **X (Twitter):** [https://x.com/SynqApp_]
 
 Stay focused. Stay synced. 
-**-- The Synq Team**
+**The Synq Team**
 
 
 """
