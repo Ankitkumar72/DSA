@@ -367,9 +367,10 @@ We are currently refining the **Synq Web** experience to mirror the premium "Ben
 
 As an early member of this server, you have a front-row seat to our development. Here is how to get started:
 
-1. **Explore the Docs:** Check out our project structure and architecture in the `#changelog`.
-2. **Join the Beta:** Keep an eye on the `#beta-access` channel for the first web and Play Store test links.
-3. **Share Your Setup:** Once you have access, post your daily planning setup in `#showcase`.
+1. **Explore the Docs:** Check out our project structure and architecture in <#1478650420909051944>.
+2. **Join the Beta:** Keep an eye on the <#1478413035185111122> channel for the first web and Play Store test links.
+3. **Share Your Setup:** Once you have access, post your daily planning setup in <#1478167642689896548>.
+4. **Suggest Features:** Have an idea? We want to hear it! Drop your suggestions in <#1478167615284445196>.
 
 ### :link: Stay Connected
 
