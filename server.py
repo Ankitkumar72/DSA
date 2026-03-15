@@ -326,25 +326,25 @@ async def serverinfo(ctx):
 
 @bot.command()
 async def rules(ctx):
-    rules_text = (
-        "Vibecoding HQ Official Guidelines\\n"
-        "Maintain a productive and professional atmosphere for all developers.\\n\\n"
-        "Section 1: Conduct and Community\\n"
-        "- Respect is Mandatory: Foster a friendly environment. Harassment, discrimination, or personal attacks are strictly prohibited.\\n"
-        "- Support Others: Be helpful to beginners. Knowledge sharing is our core value; gatekeeping is discouraged.\\n\\n"
-        "Section 2: Content Standards\\n"
-        "- Professional Environment: Keep all discussions safe for work. Explicit or offensive material will be removed.\\n"
-        "- Legal Compliance: Do not share pirated software, copyrighted courses, or illegal content.\\n"
-        "- Privacy: Respect member confidentiality. Never share personal information (doxing) without consent.\\n\\n"
-        "Section 3: Participation Etiquette\\n"
-        "- No Spam: Avoid excessive messaging, irrelevant self-promotion, or link dumping.\\n"
-        "- Channel Relevance: Keep conversations in their designated channels to maintain organization.\\n"
-        "- Verified Links: Use trusted domains. Suspicious or malicious links will be deleted by auto-mod.\\n\\n"
-        "Section 4: Enforcement\\n"
-        "- Common Sense: Use good judgment. These rules are a baseline, not an exhaustive list.\\n"
-        "- Mod Authority: Moderators have final say on enforcement. Violations result in warnings, mutes, or permanent bans."
+    embed = discord.Embed(
+        title="Server Rules",
+        description="Welcome to our community! Keep it chill, keep it cool.",
+        color=discord.Color.blue()
     )
-    await ctx.send(rules_text)
+    
+    embed.add_field(name="1. Be Respectful", value="Treat everyone with respect. No harassment, hate speech, or personal attacks. We are all here to vibe and grow.", inline=False)
+    embed.add_field(name="2. No Spam", value="Avoid excessive messages, self-promotion, or link dumping. Quality over quantity.", inline=False)
+    embed.add_field(name="3. Stay On Topic", value="Use the right channels for the right conversations. Keep discussions relevant.", inline=False)
+    embed.add_field(name="4. No NSFW Content", value="Keep it clean. No explicit, offensive, or inappropriate content.", inline=False)
+    embed.add_field(name="5. Help, Dont Gatekeep", value="Everyone starts somewhere. Be supportive of beginners and share knowledge freely.", inline=False)
+    embed.add_field(name="6. No Piracy", value="Dont share or request pirated software, courses, or copyrighted material.", inline=False)
+    embed.add_field(name="7. Respect Privacy", value="Dont share others personal information. What is shared here stays here.", inline=False)
+    embed.add_field(name="8. Verified Links Only", value="Only admin-whitelisted domains are allowed. Videos are always welcome! If you want a site added, ask a mod.", inline=False)
+    embed.add_field(name="9. Use Common Sense", value="If it feels wrong, it probably is. When in doubt, ask a mod.", inline=False)
+    
+    embed.set_footer(text="Breaking rules may result in warnings, mutes, or bans. Let's keep this a great place to code!")
+    
+    await ctx.send(embed=embed)
 
 @bot.event
 async def on_guild_channel_create(channel):
