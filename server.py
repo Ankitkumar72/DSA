@@ -346,6 +346,42 @@ async def rules(ctx):
     
     await ctx.send(embed=embed)
 
+@bot.command()
+async def announcements(ctx):
+    announcement_text = """
+
+
+##  Welcome to the Synq!
+
+We are thrilled to have you here. **Synq** is more than just another productivity app; it is a high-performance workspace designed to help you organize your life through a clean, intuitive, and "Focus-First" experience.
+
+###  What is Synq?
+
+Synq combines **Task Management**, **Rich-Text Notes**, and a **Visual Daily Timeline** into a single, fluid interface. Built with a **Feature-First Architecture** and **Riverpod**, it ensures your data is always secure, synced, and available offline-first.
+
+###  What We Are Building Right Now
+
+We are currently refining the **Synq Web** experience to mirror the premium "Bento Box" UI of our mobile app. Expect a high-contrast, professional "Command Center" that puts your productivity at the forefront.
+
+###  How You Can Help (Beta Testing)
+
+As an early member of this server, you have a front-row seat to our development. Here is how to get started:
+
+1. **Explore the Docs:** Check out our project structure and architecture in the `#changelog`.
+2. **Join the Beta:** Keep an eye on the `#beta-access` channel for the first web and Play Store test links.
+3. **Share Your Setup:** Once you have access, post your daily planning setup in `#showcase`.
+
+### :link: Stay Connected
+
+* **X (Twitter):** [https://x.com/SynqApp_]
+
+Stay focused. Stay synced. 
+**-- The Synq Team**
+
+
+"""
+    await ctx.send(announcement_text)
+
 @bot.event
 async def on_guild_channel_create(channel):
     log_channel = discord.utils.get(channel.guild.channels, name="mod-logs")
